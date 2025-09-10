@@ -1,9 +1,8 @@
-const express = require('express')
 const { exec } = require('child_process');
-const keypress = require('keypress');
-const app = express()
-const port = 3000
 const { SerialPort } = require('serialport');
+// const { SerialPort } = require('@serialport/stream');
+const bindings  = require('@serialport/bindings-cpp');
+SerialPort.bindings = bindings;
 
 const puerto = new SerialPort({ 
   path: 'COM4', // Replace with your serial port path (e.g., COM3 on Windows)
@@ -155,7 +154,7 @@ puerto.on('error', (err) => {
     console.error('Serial Port Error:', err.message);
 });
 
-app.listen(port, () => {
-  console.log(`Escuchando en el puerto ${port}`)
-})
+// app.listen(port, () => {
+//   console.log(`Escuchando en el puerto ${port}`)
+// })
 
