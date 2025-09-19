@@ -17,7 +17,7 @@ puerto.on('data', (data) => {
     const keypressed = data.toString().trim(); // Convert buffer to string and remove whitespace
     // console.log('Key Pressed:', keypressed);
     switch(keypressed){
-      case "1":
+      case "6":
         exec('start https://www.youtube.com', (error, stdout, stderr) => {
           if (error) {
             console.error(`Error al ejecutar el comando: ${error.message}`);
@@ -27,7 +27,7 @@ puerto.on('data', (data) => {
             console.error(`Salida de error: ${stderr}`);
             return;
           }
-          console.log(`Salida del comando: ${stdout}`);
+          // console.log(`Salida del comando: ${stdout}`);
           });
         break;
       case "2":
@@ -40,7 +40,7 @@ puerto.on('data', (data) => {
             console.error(`Salida de error: ${stderr}`);
             return;
           }
-          console.log(`Salida del comando: ${stdout}`);
+          // console.log(`Salida del comando: ${stdout}`);
           });
         break;
       case "A":
@@ -53,10 +53,10 @@ puerto.on('data', (data) => {
             console.error(`Salida de error: ${stderr}`);
             return;
           }
-          console.log(`Salida del comando: ${stdout}`);
+          // console.log(`Salida del comando: ${stdout}`);
           });
         break;
-      case "4":
+      case "9":
         exec('start https://www.instagram.com', (error, stdout, stderr) => {
           if (error) {
             console.error(`Error al ejecutar el comando: ${error.message}`);
@@ -66,7 +66,7 @@ puerto.on('data', (data) => {
             console.error(`Salida de error: ${stderr}`);
             return;
           }
-          console.log(`Salida del comando: ${stdout}`);
+          // console.log(`Salida del comando: ${stdout}`);
           });
         break;
       case "5":
@@ -76,10 +76,10 @@ puerto.on('data', (data) => {
             return;
           }
           if (stderr) {
-            console.error(`Salida de error: ${stderr}`);
+            // console.error(`Salida de error: ${stderr}`);
             return;
           }
-          console.log(`Salida del comando: ${stdout}`);
+          // console.log(`Salida del comando: ${stdout}`);
           });
         break;
       case "B":
@@ -92,10 +92,10 @@ puerto.on('data', (data) => {
             console.error(`Salida de error: ${stderr}`);
             return;
           }
-          console.log(`Salida del comando: ${stdout}`);
+          // console.log(`Salida del comando: ${stdout}`);
           });
         break;
-      case "7":
+      case "0":
           exec('start C:/xampp/xampp-control.exe', (error, stdout, stderr) => {
           if (error) {
             console.error(`Error al ejecutar el comando: ${error.message}`);
@@ -105,7 +105,7 @@ puerto.on('data', (data) => {
             console.error(`Salida de error: ${stderr}`);
             return;
           }
-          console.log(`Salida del comando: ${stdout}`);
+          // console.log(`Salida del comando: ${stdout}`);
           });
         break;
       case "8":
@@ -118,7 +118,7 @@ puerto.on('data', (data) => {
             console.error(`Salida de error: ${stderr}`);
             return;
           }
-          console.log(`Salida del comando: ${stdout}`);
+          // console.log(`Salida del comando: ${stdout}`);
           });
         break;
       case "C":
@@ -131,11 +131,11 @@ puerto.on('data', (data) => {
             console.error(`Salida de error: ${stderr}`);
             return;
           }
-          console.log(`Salida del comando: ${stdout}`);
+          // console.log(`Salida del comando: ${stdout}`);
           });
         break;
-      case "*":
-          exec('calc', (error, stdout, stderr) => {
+      case "D":
+          exec('start C:/Users/Alumnito/AppData/Local/Roblox/Versions/version-c1ac69007bdc4e48/RobloxPlayerBeta.exe', (error, stdout, stderr) => {
           if (error) {
             console.error(`Error al ejecutar el comando: ${error.message}`);
             return;
@@ -144,7 +144,7 @@ puerto.on('data', (data) => {
             console.error(`Salida de error: ${stderr}`);
             return;
           }
-          console.log(`Salida del comando: ${stdout}`);
+          // console.log(`Salida del comando: ${stdout}`);
           });
         break;
     }
