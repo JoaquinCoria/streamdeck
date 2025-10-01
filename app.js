@@ -4,7 +4,26 @@ const { SerialPort } = require('serialport');
 const bindings  = require('@serialport/bindings-cpp');
 SerialPort.bindings = bindings;
 
-const puerto = new SerialPort({ 
+
+const express = require('express')
+const app = express()
+app.use(express.static('css/index.css'));
+const port = 3000
+
+app.set('view engine', 'pug')
+app.get('/aa', (req, res) => {
+  res.render('index', { title: 'Streamdeck', message: 'Streamdeck' })
+})
+app.get('/index', (req, res) => {
+  res.send('Hello World!')
+})
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
+
+
+const puerto = new SerialPort({
   path: 'COM4', // Replace with your serial port path (e.g., COM3 on Windows)
   baudRate: 115200
 });
