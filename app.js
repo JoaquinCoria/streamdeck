@@ -2,6 +2,8 @@ const { exec } = require('child_process');
 const { SerialPort } = require('serialport');
 // const { SerialPort } = require('@serialport/stream');
 const bindings  = require('@serialport/bindings-cpp');
+const multer = require('multer');
+const archivo = multer({ dest: 'archivos/' });
 SerialPort.bindings = bindings;
 
 
@@ -11,17 +13,19 @@ app.use(express.static('css/index.css'));
 const port = 3000
 
 app.set('view engine', 'pug')
-app.get('/aa', (req, res) => {
+app.get('/', (req, res) => {
   res.render('index', { title: 'Streamdeck', message: 'Streamdeck' })
 })
-app.get('/index', (req, res) => {
-  res.send('Hello World!')
-})
+app.use(express.urlencoded({ extended: true }));
 
+app.post('/resultado', archivo.single('archivo'), (req, res) => {
+  // const{archivo} = req.file;
+  console.log(req.file)
+  res.send('Archivo cargado');
+})
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
-
 
 const puerto = new SerialPort({
   path: 'COM4', // Replace with your serial port path (e.g., COM3 on Windows)
@@ -176,4 +180,3 @@ puerto.on('error', (err) => {
 // app.listen(port, () => {
 //   console.log(`Escuchando en el puerto ${port}`)
 // })
-

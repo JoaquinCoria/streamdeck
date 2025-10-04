@@ -5,24 +5,30 @@ html
     title= title
   body
     h1(class="text-6x1 text-red")= message
-    div.streamdeck
-      .fila 
-        button 1
-        button 2
-        button 3
-        button.letra A
-      .fila 
-        button 4
-        button 5
-        button 6
-        button.letra B
-      .fila 
-        button 7
-        button 8
-        button 9
-        button.letra C
-      .fila 
-        button *
-        button 0
-        button #
-        button.letra D
+    .contenedor 
+      div.streamdeck
+        .fila 
+          button 1
+          button 2
+          button 3
+          button.letra A
+        .fila 
+          button 4
+          button 5
+          button 6
+          button.letra B
+        .fila 
+          button 7
+          button 8
+          button 9
+          button.letra C
+        .fila 
+          button(class = 'letra asterisco') *
+          button 0
+          button.letra #
+          button.letra D
+      .funciones
+        form(action="/resultado" method = "post" enctype="multipart/form-data") 
+          label(for="archivo") 
+          input(type='file' id = 'archivo' name = 'archivo')
+          button(type='submit') Enviar
