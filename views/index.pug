@@ -28,7 +28,7 @@ html
           button.letra #
           button.letra D
       .funciones
-        form(action="/resultado" method = "post" enctype="multipart/form-data") 
-          label(for="archivo") 
-          input(type='file' id = 'archivo' name = 'archivo')
+        form(action="/resultado" method = "post") 
+          label(for="archivo") Ingrese el URL del archivo
+          input(type='text' id = 'archivo' name = 'archivo')
           button(type='submit') Enviar

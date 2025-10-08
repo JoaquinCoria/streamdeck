@@ -1,3 +1,6 @@
+:root{
+    --azul: rgb(0, 110, 255);
+}
 *{
     margin: 0;
     padding: 0;
@@ -5,7 +8,7 @@
 body{
     background-color: rgb(224, 224, 224);
     box-sizing: border-box;
-    width: 100%;
+    width: 97.5%;
     display:flex;
     flex-direction: column;
 }
@@ -71,6 +74,7 @@ h1{
 
 }
 .funciones{
+    border-radius: 10px 0 0 10px;
     background-color: black;
     width: 100%;
     height: auto;
@@ -79,6 +83,35 @@ h1{
 .funciones form{
     display: flex;
     flex-direction: column;
-    background-color: red;
     gap: 15px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: white;
+    justify-content: center;
+    align-items: center;
+}
+form input[type="text"]{
+    width: 40%;
+    padding: 4px 10px;
+    border-radius: 10px;
+    transition: all 200ms;
+}
+form input[type="text"]:focus{
+    background-color:  var(--azul);
+    color: white;
+    transition: all 200ms;
+}
+form button{
+    width: fit-content;
+    padding: 5px 20px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: var(--azul);
+    color: white;
+    border: white inset 2px;
+    transition: all 200ms;
+}
+form button:hover{
+    background-color: red;
+    transition: all 200ms;
 }

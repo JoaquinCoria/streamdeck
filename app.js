@@ -2,10 +2,7 @@ const { exec } = require('child_process');
 const { SerialPort } = require('serialport');
 // const { SerialPort } = require('@serialport/stream');
 const bindings  = require('@serialport/bindings-cpp');
-const multer = require('multer');
-const archivo = multer({ dest: 'archivos/' });
 SerialPort.bindings = bindings;
-
 
 const express = require('express')
 const app = express()
@@ -14,14 +11,15 @@ const port = 3000
 
 app.set('view engine', 'pug')
 app.get('/', (req, res) => {
+  console.log(resultado);
   res.render('index', { title: 'Streamdeck', message: 'Streamdeck' })
 })
-app.use(express.urlencoded({ extended: true }));
 
-app.post('/resultado', archivo.single('archivo'), (req, res) => {
-  // const{archivo} = req.file;
-  console.log(req.file)
-  res.send('Archivo cargado');
+app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
+
+app.post('/resultado', (req, res) => {
+  resultado = req.body;
 })
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
@@ -35,7 +33,8 @@ const puerto = new SerialPort({
 puerto.on('open', () => {
     console.log('Serial Port Open');
 });
-
+let resultado = null;
+console.log(resultado);
 puerto.on('data', (data) => {
     const keypressed = data.toString().trim(); // Convert buffer to string and remove whitespace
     // console.log('Key Pressed:', keypressed);
@@ -158,7 +157,7 @@ puerto.on('data', (data) => {
           });
         break;
       case "D":
-          exec('start C:/Users/Alumnito/AppData/Local/Roblox/Versions/version-c1ac69007bdc4e48/RobloxPlayerBeta.exe', (error, stdout, stderr) => {
+          exec(resultado, (error, stdout, stderr) => {
           if (error) {
             console.error(`Error al ejecutar el comando: ${error.message}`);
             return;
