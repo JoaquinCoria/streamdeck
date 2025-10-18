@@ -8,9 +8,10 @@
 body{
     background-color: rgb(224, 224, 224);
     box-sizing: border-box;
-    width: 97.5%;
+    width: 100%;
     display:flex;
     flex-direction: column;
+    overflow: hidden;
 }
 h1{
     font-size: 2.5rem;
@@ -23,6 +24,10 @@ h1{
     /* flex-direction: row; */
     /* gap: 5vw; */
     grid-template-columns: 1fr 1fr;
+}
+form{
+    display: flex;
+    width: 100%;
 }
 .streamdeck{
     height: 65vh;
@@ -37,6 +42,8 @@ h1{
     background-color: black;
     border: solid white 2px, black 5px solid;
     margin-left: 50px;
+    transform: translateX(65%);
+    transition: all 300ms;
 }
 .fila{
     width: 100%;
@@ -45,7 +52,7 @@ h1{
     flex-direction: row;
     gap: 20px;
 }
-.fila button{
+.fila > label{
     width: 8.5vw;
     min-width: 30px;
     min-height: 70px;
@@ -56,8 +63,16 @@ h1{
     border: white solid;
     color: white;
     transition: all 200ms;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
 }
-.fila button:hover{
+.fila input{
+    display: none;
+}
+.fila > label:hover{
     border: rgb(0, 110, 255);
     transition: all 200ms;
     color: black;
@@ -70,37 +85,54 @@ h1{
     border: red;
     transition: all 200ms;
 }
-.streamdeck .asterisco{
-
+.streamdeck input[type='radio']:checked + label{
+    background-color: #eee;
+    color: rgb(0, 110, 255);
+    font-weight: bolder;
+    transition: all 200ms;
+    border-color: rgb(0, 110, 255);
+}
+.streamdeck input[class="btnLetra"]:checked + label{
+    background-color: #eee;
+    color: red;
+    font-weight: bolder;
+    transition: all 200ms;
+    border-color: red;
 }
 .funciones{
+    transform: translateX(100%);
     border-radius: 10px 0 0 10px;
     background-color: black;
     width: 100%;
     height: auto;
     padding: 15px;
+    transition: all 300ms;
 }
-.funciones form{
+.funcionesActivo{
+    transform: translate(0);
+    transition: all 300ms;
+}
+.funciones{
     display: flex;
     flex-direction: column;
     gap: 15px;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     color: white;
-    justify-content: center;
     align-items: center;
+    padding: 25px 10px 10px 10px;
 }
-form input[type="text"]{
+.funciones input[type="text"]{
     width: 40%;
     padding: 4px 10px;
     border-radius: 10px;
     transition: all 200ms;
 }
-form input[type="text"]:focus{
+.funciones input[type="text"]:focus{
     background-color:  var(--azul);
     color: white;
     transition: all 200ms;
 }
-form button{
+.funciones button{
     width: fit-content;
     padding: 5px 20px;
     font-weight: bold;
@@ -111,7 +143,7 @@ form button{
     border: white inset 2px;
     transition: all 200ms;
 }
-form button:hover{
+.funciones button:hover{
     background-color: red;
     transition: all 200ms;
 }

@@ -3,10 +3,11 @@ const { SerialPort } = require('serialport');
 // const { SerialPort } = require('@serialport/stream');
 const bindings  = require('@serialport/bindings-cpp');
 SerialPort.bindings = bindings;
+const { stringify } = require('csv-stringify');
 
 const express = require('express')
 const app = express()
-app.use(express.static('css/index.css'));
+app.use(express.static('views'));
 const port = 3000
 
 app.set('view engine', 'pug')
@@ -16,17 +17,18 @@ app.get('/', (req, res) => {
 })
 
 app.use(express.urlencoded({ extended: true }));
-// app.use(express.json());
+app.use(express.json());
 
 app.post('/resultado', (req, res) => {
   resultado = req.body;
+  console.log(resultado);
 })
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
 
 const puerto = new SerialPort({
-  path: 'COM4', // Replace with your serial port path (e.g., COM3 on Windows)
+  path: 'COM8',
   baudRate: 115200
 });
 
@@ -39,8 +41,22 @@ puerto.on('data', (data) => {
     const keypressed = data.toString().trim(); // Convert buffer to string and remove whitespace
     // console.log('Key Pressed:', keypressed);
     switch(keypressed){
-      case "6":
-        exec('start https://www.youtube.com', (error, stdout, stderr) => {
+      // case "6":
+      //   exec('start https://www.youtube.com', (error, stdout, stderr) => {
+      //     if (error) {
+      //       console.error(`Error al ejecutar el comando: ${error.message}`);
+      //       return;
+      //     }
+      //     if (stderr) {
+      //       console.error(`Salida de error: ${stderr}`);
+      //       return;
+      //     }
+      //     // console.log(`Salida del comando: ${stdout}`);
+      //     });
+      //   break;
+      case resultado['boton']:
+        console.log(resultado['archivo']);
+        exec('start ' + resultado['archivo'], (error, stdout, stderr) => {
           if (error) {
             console.error(`Error al ejecutar el comando: ${error.message}`);
             return;
@@ -52,123 +68,112 @@ puerto.on('data', (data) => {
           // console.log(`Salida del comando: ${stdout}`);
           });
         break;
-      case "2":
-        exec('start explorer', (error, stdout, stderr) => {
-          if (error) {
-            console.error(`Error al ejecutar el comando: ${error.message}`);
-            return;
-          }
-          if (stderr) {
-            console.error(`Salida de error: ${stderr}`);
-            return;
-          }
-          // console.log(`Salida del comando: ${stdout}`);
-          });
-        break;
-      case "A":
-        exec('start code', (error, stdout, stderr) => {
-          if (error) {
-            console.error(`Error al ejecutar el comando: ${error.message}`);
-            return;
-          }
-          if (stderr) {
-            console.error(`Salida de error: ${stderr}`);
-            return;
-          }
-          // console.log(`Salida del comando: ${stdout}`);
-          });
-        break;
-      case "9":
-        exec('start https://www.instagram.com', (error, stdout, stderr) => {
-          if (error) {
-            console.error(`Error al ejecutar el comando: ${error.message}`);
-            return;
-          }
-          if (stderr) {
-            console.error(`Salida de error: ${stderr}`);
-            return;
-          }
-          // console.log(`Salida del comando: ${stdout}`);
-          });
-        break;
-      case "5":
-        exec('github', (error, stdout, stderr) => {
-          if (error) {
-            console.error(`Error al ejecutar el comando: ${error.message}`);
-            return;
-          }
-          if (stderr) {
-            // console.error(`Salida de error: ${stderr}`);
-            return;
-          }
-          // console.log(`Salida del comando: ${stdout}`);
-          });
-        break;
-      case "B":
-        exec('start ms-settings:home', (error, stdout, stderr) => {
-          if (error) {
-            console.error(`Error al ejecutar el comando: ${error.message}`);
-            return;
-          }
-          if (stderr) {
-            console.error(`Salida de error: ${stderr}`);
-            return;
-          }
-          // console.log(`Salida del comando: ${stdout}`);
-          });
-        break;
-      case "0":
-          exec('start C:/xampp/xampp-control.exe', (error, stdout, stderr) => {
-          if (error) {
-            console.error(`Error al ejecutar el comando: ${error.message}`);
-            return;
-          }
-          if (stderr) {
-            console.error(`Salida de error: ${stderr}`);
-            return;
-          }
-          // console.log(`Salida del comando: ${stdout}`);
-          });
-        break;
-      case "8":
-          exec('taskmgr', (error, stdout, stderr) => {
-          if (error) {
-            console.error(`Error al ejecutar el comando: ${error.message}`);
-            return;
-          }
-          if (stderr) {
-            console.error(`Salida de error: ${stderr}`);
-            return;
-          }
-          // console.log(`Salida del comando: ${stdout}`);
-          });
-        break;
-      case "C":
-          exec('calc', (error, stdout, stderr) => {
-          if (error) {
-            console.error(`Error al ejecutar el comando: ${error.message}`);
-            return;
-          }
-          if (stderr) {
-            console.error(`Salida de error: ${stderr}`);
-            return;
-          }
-          // console.log(`Salida del comando: ${stdout}`);
-          });
-        break;
-      case "D":
-          exec(resultado, (error, stdout, stderr) => {
-          if (error) {
-            console.error(`Error al ejecutar el comando: ${error.message}`);
-            return;
-          }
-          if (stderr) {
-            console.error(`Salida de error: ${stderr}`);
-            return;
-          }
-          // console.log(`Salida del comando: ${stdout}`);
-          });
-        break;
+      // case "A":
+      //   exec('start code', (error, stdout, stderr) => {
+      //     if (error) {
+      //       console.error(`Error al ejecutar el comando: ${error.message}`);
+      //       return;
+      //     }
+      //     if (stderr) {
+      //       console.error(`Salida de error: ${stderr}`);
+      //       return;
+      //     }
+      //     // console.log(`Salida del comando: ${stdout}`);
+      //     });
+      //   break;
+      // case "9":
+      //   exec('start https://www.instagram.com', (error, stdout, stderr) => {
+      //     if (error) {
+      //       console.error(`Error al ejecutar el comando: ${error.message}`);
+      //       return;
+      //     }
+      //     if (stderr) {
+      //       console.error(`Salida de error: ${stderr}`);
+      //       return;
+      //     }
+      //     // console.log(`Salida del comando: ${stdout}`);
+      //     });
+      //   break;
+      // case "5":
+      //   exec('github', (error, stdout, stderr) => {
+      //     if (error) {
+      //       console.error(`Error al ejecutar el comando: ${error.message}`);
+      //       return;
+      //     }
+      //     if (stderr) {
+      //       // console.error(`Salida de error: ${stderr}`);
+      //       return;
+      //     }
+      //     // console.log(`Salida del comando: ${stdout}`);
+      //     });
+      //   break;
+      // case "B":
+      //   exec('start ms-settings:home', (error, stdout, stderr) => {
+      //     if (error) {
+      //       console.error(`Error al ejecutar el comando: ${error.message}`);
+      //       return;
+      //     }
+      //     if (stderr) {
+      //       console.error(`Salida de error: ${stderr}`);
+      //       return;
+      //     }
+      //     // console.log(`Salida del comando: ${stdout}`);
+      //     });
+      //   break;
+      // case "0":
+      //     exec('start C:/xampp/xampp-control.exe', (error, stdout, stderr) => {
+      //     if (error) {
+      //       console.error(`Error al ejecutar el comando: ${error.message}`);
+      //       return;
+      //     }
+      //     if (stderr) {
+      //       console.error(`Salida de error: ${stderr}`);
+      //       return;
+      //     }
+      //     // console.log(`Salida del comando: ${stdout}`);
+      //     });
+      //   break;
+      // case "8":
+      //     exec('taskmgr', (error, stdout, stderr) => {
+      //     if (error) {
+      //       console.error(`Error al ejecutar el comando: ${error.message}`);
+      //       return;
+      //     }
+      //     if (stderr) {
+      //       console.error(`Salida de error: ${stderr}`);
+      //       return;
+      //     }
+      //     // console.log(`Salida del comando: ${stdout}`);
+      //     });
+      //   break;
+      // case "C":
+      //     exec('calc', (error, stdout, stderr) => {
+      //     if (error) {
+      //       console.error(`Error al ejecutar el comando: ${error.message}`);
+      //       return;
+      //     }
+      //     if (stderr) {
+      //       console.error(`Salida de error: ${stderr}`);
+      //       return;
+      //     }
+      //     // console.log(`Salida del comando: ${stdout}`);
+      //     });
+      //   break;
+      //       console.error(`Error al ejecutar el comando: ${error.message}`);
+      // case "D":
+      //     exec(resultado, (error, stdout, stderr) => {
+      //     if (error) {
+      //       console.error(`Error al ejecutar el comando: ${error.message}`);
+      //       console.error(`Error al ejecutar el comando: ${error.message}`);
+      //       return;
+      //     }
+      //     if (stderr) {
+      //       console.error(`Salida de error: ${stderr}`);
+      //       return;
+      //     }
+      //     // console.log(`Salida del comando: ${stdout}`);
+      //     });
+      //   break;
     }
 });
 

@@ -4,31 +4,48 @@ html
       include index.css
     title= title
   body
-    h1(class="text-6x1 text-red")= message
-    .contenedor 
-      div.streamdeck
-        .fila 
-          button 1
-          button 2
-          button 3
-          button.letra A
-        .fila 
-          button 4
-          button 5
-          button 6
-          button.letra B
-        .fila 
-          button 7
-          button 8
-          button 9
-          button.letra C
-        .fila 
-          button(class = 'letra asterisco') *
-          button 0
-          button.letra #
-          button.letra D
-      .funciones
-        form(action="/resultado" method = "post") 
-          label(for="archivo") Ingrese el URL del archivo
-          input(type='text' id = 'archivo' name = 'archivo')
-          button(type='submit') Enviar
+    h1= message
+    form(action="/resultado" method = "post")
+      .contenedor
+          div.streamdeck 
+            .fila
+              input(type = "radio" name = "boton" value = "1" id = "boton1" class = "labelBoton")
+              label(for="boton1") 1
+              input(type = "radio" name = "boton" value = "2" id = "boton2" class = "labelBoton")
+              label(for="boton2") 2
+              input(type = "radio" name = "boton" value = "3" id = "boton3" class = "labelBoton")
+              label(for="boton3") 3
+              input(type = "radio" name = "boton" value = "A" id = "botonA" class = "btnLetra labelBoton")
+              label(for="botonA").letra A
+            .fila
+              input(type = "radio" name = "boton" value = "4" id = "boton4" class = "labelBoton")
+              label(for="boton4") 4
+              input(type = "radio" name = "boton" value = "5" id = "boton5" class = "labelBoton")
+              label(for="boton5") 5
+              input(type = "radio" name = "boton" value = "6" id = "boton6" class = "labelBoton")
+              label(for="boton6") 6
+              input(type = "radio" name = "boton" value = "B" id = "botonB" class = "btnLetra labelBoton")
+              label(for="botonB").letra B
+            .fila
+              input(type = "radio" name = "boton" value = "7" id = "boton7" class = "labelBoton")
+              label(for="boton7") 7
+              input(type = "radio" name = "boton" value = "8" id = "boton8" class = "labelBoton")
+              label(for="boton8") 8
+              input(type = "radio" name = "boton" value = "9" id = "boton9" class = "labelBoton")
+              label(for="boton9") 9
+              input(type = "radio" name = "boton" value = "C" id = "botonC" class = "btnLetra labelBoton")
+              label(for="botonC").letra C
+            .fila
+              input(type = "radio" name = "boton" value = "*" id = "botonAsterisco" class = "btnLetra labelBoton")
+              label(for="botonAsterisco").letra *
+              input(type = "radio" name = "boton" value = "0" id = "boton0" class = "labelBoton")
+              label(for="boton0") 0
+              input(type = "radio" name = "boton" value = "#" id = "botonHashtag" class = "btnLetra labelBoton")
+              label(for="botonHashtag").letra #
+              input(type = "radio" name = "boton" value = "D" id = "botonD" class = "btnLetra labelBoton")
+              label(for="botonD").letra D
+          .funciones
+            label(for="archivo") Ingrese el URL del archivo
+            input(type='text' id = 'archivo' name = 'archivo')
+            button(type='submit') Enviar
+script(src='mostrarFunciones.js') 
