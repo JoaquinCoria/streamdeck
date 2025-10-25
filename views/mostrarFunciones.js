@@ -20,3 +20,12 @@ botones.forEach(boton => {
         numeroBoton = boton.id.slice(-1);
     }
 });
+const info = document.getElementsByClassName("info1");
+window.addEventListener('scroll', function() {
+    if (window.scrollY > 750) {
+        info[0].style.transform = "translateX(0)";
+        info[1].style.color = "red";
+    } else {
+        
+    }
+});

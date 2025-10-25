@@ -6,12 +6,12 @@
     padding: 0;
 }
 body{
-    background-color: rgb(224, 224, 224);
+    background: linear-gradient(rgb(238, 236, 236), rgb(0, 0, 0));
     box-sizing: border-box;
-    width: 100%;
+    width: 100vw;
     display:flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 h1{
     font-size: 2.5rem;
@@ -146,4 +146,54 @@ form{
 .funciones button:hover{
     background-color: red;
     transition: all 200ms;
+}
+.tutorial {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+.tutorial h1{
+    padding: 30vh 0 10vh 0;
+}
+
+.info1 {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    align-items: center;
+
+
+}
+
+.info1 img{
+    object-fit: contain;
+    width: 40%;
+}
+
+.info1 p{
+    width: 50%;
+    font-size: 1.4rem;
+    padding: 10VH ;
+}
+#info1{
+    transform: translateX(-100vw);
+}
+#info2{
+    color: white;
+    transform: translateX(100vw);
+}
+#info3{
+    color:white;
+    transform: translateX(-100vw);
+}
+
+.contenedorInfo{
+    gap: 30vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }

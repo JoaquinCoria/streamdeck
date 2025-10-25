@@ -9,11 +9,12 @@ const { Parser } = require('json2csv');
 const express = require('express')
 const app = express()
 app.use(express.static('views'));
+app.use(express.static('img'));
+
 const port = 3000
 
 app.set('view engine', 'pug')
 app.get('/', (req, res) => {
-  console.log(resultado);
   res.render('index', { title: 'Streamdeck', message: 'Streamdeck' })
 })
 
@@ -37,7 +38,7 @@ app.post('/resultado', (req, res) => {
       ['boton', 'direccion'],
       [resultado['boton'], resultado['archivo']],
     ];
-    const csvContentenido = datos.map(row => row.join(',')).join('\n');
+    const csvContentenido = 'boton,direccion\n'+resultado['boton']+","+resultado['archivo']+"\n";
 
     fs.writeFile('streamdeck.csv', csvContentenido, (err) => {
       if (err) {
@@ -57,7 +58,7 @@ app.post('/resultado', (req, res) => {
     });
   }
 
-  fs.readFile('streamdeck.csv', 'utf8', (err, data) => {
+  const funcionesBotones = fs.readFile('streamdeck.csv', 'utf8', (err, data) => {
     if (err) {
         console.error('Error reading file:', err);
         return;
@@ -68,16 +69,14 @@ app.post('/resultado', (req, res) => {
     const arrayDatos = [];
 
     for (let i = 1; i < filas.length; i++) {
-        const valores = filas[i].split(',');
-        const entry = {};
-        for (let j = 0; j < encabezados.length; j++) {
-            entry[encabezados[j]] = valores[j];
-        }
-        arrayDatos.push(entry);
+      const valores = filas[i].split(',');
+      const entry = {};
+      for (let j = 0; j < encabezados.length; j++) {
+        entry[encabezados[j]] = valores[j];
+      }
+      arrayDatos.push(entry);
     }
-    console.log(arrayDatos);
-});
-
+  });
   res.redirect('/');
 })
 
