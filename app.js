@@ -7,6 +7,9 @@ SerialPort.bindings = bindings;
 const fs = require('fs');
 const { Parser } = require('json2csv');
 const express = require('express')
+const session = require("express-session");
+const bcrypt = require("bcryptjs");
+const pool = require("./db");
 const app = express()
 app.use(express.static('views'));
 app.use(express.static('img'));
@@ -20,6 +23,52 @@ app.get('/', (req, res) => {
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+app.use(
+  session({
+    secret: "clave-secreta-super-segura",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 1000 * 60 * 30 }
+  })
+);
+
+function authRequired(req, res, next) {
+  if (!req.session.user) return res.status(401).json({ error: "No autorizado" });
+  next();
+}
+
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  const [rows] = await pool.query("SELECT * FROM usuario WHERE nombre = ?", [
+    username
+  ]);
+
+  if (rows.length === 0)
+    return res.status(400).json({ error: "Usuario no encontrado" });
+
+  const user = rows[0];
+
+  const ok = bcrypt.compareSync(password, user.password);
+  if (!ok) return res.status(400).json({ error: "Credenciales inválidas" });
+
+  req.session.user = { id: user.id, username: user.username };
+
+  res.json({ message: "Login exitoso" });
+});
+
+app.get("/perfil", authRequired, (req, res) => {
+  res.json({ user: req.session.user });
+});
+
+// Logout
+app.post("/logout", (req, res) => {
+  req.session.destroy(err => {
+    if (err) return res.status(500).json({ error: "Error cerrando sesión" });
+    res.json({ message: "Sesión finalizada" });
+  });
+});
 
 app.post('/resultado', (req, res) => {
   
