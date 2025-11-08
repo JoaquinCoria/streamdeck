@@ -5,10 +5,13 @@
     margin: 0;
     padding: 0;
 }
+html{
+    width: 100%;
+}
 body{
     background: linear-gradient(rgb(238, 236, 236), rgb(0, 0, 0));
     box-sizing: border-box;
-    width: 100vw;
+    width: 100%;
     display:flex;
     flex-direction: column;
     overflow-x: hidden;
@@ -164,13 +167,12 @@ form{
     flex-direction: row;
     width: 80%;
     align-items: center;
-
-
+    transition: all 800ms;
 }
 
-.info1 img{
-    object-fit: contain;
-    width: 40%;
+.info1 video{
+    border-radius: 10px;
+    box-shadow: black 3px 3px 8px;
 }
 
 .info1 p{

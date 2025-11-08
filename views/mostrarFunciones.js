@@ -22,10 +22,22 @@ botones.forEach(boton => {
 });
 const info = document.getElementsByClassName("info1");
 window.addEventListener('scroll', function() {
-    if (window.scrollY > 750) {
+    if (window.scrollY > 550) {
+        info[0].style.transition = "all 800ms";
         info[0].style.transform = "translateX(0)";
-        info[1].style.color = "red";
     } else {
-        
+        info[0].style.transform = "translateX(-100vw)";
+    }
+    if (window.scrollY > 900) {
+        info[1].style.transition = "all 800ms";
+        info[1].style.transform = "translateX(0)";
+    } else {
+        info[1].style.transform = "translateX(100vw)";
+    }
+    if (window.scrollY > 1200) {
+        info[2].style.transition = "all 800ms";
+        info[2].style.transform = "translateX(0)";
+    } else {
+        info[2].style.transform = "translateX(-100vw)";
     }
 });

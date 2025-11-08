@@ -10,6 +10,9 @@ const express = require('express')
 const app = express()
 app.use(express.static('views'));
 app.use(express.static('img'));
+const session = require("express-session");
+const bcrypt = require("bcryptjs");
+const pool = require("./db");
 
 const port = 3000
 
@@ -21,10 +24,37 @@ app.get('/', (req, res) => {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+
+function csvAarray(csv){
+   const filas = csv.split(';');
+    const encabezados = filas[0].split(',');
+    const arrayDatos = [];
+
+    for (let i = 1; i < filas.length; i++) {
+      const valores = filas[i].split(',');
+      const entry = {};
+      for (let j = 0; j < encabezados.length; j++) {
+        entry[encabezados[j]] = valores[j];
+      }
+      arrayDatos.push(entry);
+    }
+    return arrayDatos;
+}
+function arrayAcsv(array){
+  for(var i = 0; i > count(array); i++){
+        if(array[i] === undefined){
+            this.splice(i , 1);
+        }
+    }
+
+  csv = "boton,direccion;";
+  array.forEach(itemsArray => {
+    csv += itemsArray['boton'] + "," + itemsArray['direccion'] + ";";
+  });
+  return csv;
+}
 app.post('/resultado', (req, res) => {
-  
   resultado = req.body;
-  // console.log(resultado);
   function archivoExiste(filePath) {
     if (fs.existsSync(filePath)) {
       return true;
@@ -38,7 +68,7 @@ app.post('/resultado', (req, res) => {
       ['boton', 'direccion'],
       [resultado['boton'], resultado['archivo']],
     ];
-    const csvContentenido = 'boton,direccion\n'+resultado['boton']+","+resultado['archivo']+"\n";
+    const csvContentenido = 'boton,direccion;'+resultado['boton']+","+resultado['archivo']+";";
 
     fs.writeFile('streamdeck.csv', csvContentenido, (err) => {
       if (err) {
@@ -48,35 +78,37 @@ app.post('/resultado', (req, res) => {
       }
     });
   }else{
-    const nuevosDatos = resultado['boton']+","+resultado['archivo']+'\n';
-    fs.appendFile(archivoCSV, nuevosDatos, (err) => {
-        if (err) {
-            console.error('Error appending data to CSV:', err);
-            return;
-        }
-        console.log('Data successfully appended to CSV.');
-    });
-  }
-
-  const funcionesBotones = fs.readFile('streamdeck.csv', 'utf8', (err, data) => {
-    if (err) {
-        console.error('Error reading file:', err);
-        return;
-    }
-    // Process the CSV data here
-    const filas = data.split('\n');
-    const encabezados = filas[0].split(',');
-    const arrayDatos = [];
-
-    for (let i = 1; i < filas.length; i++) {
-      const valores = filas[i].split(',');
-      const entry = {};
-      for (let j = 0; j < encabezados.length; j++) {
-        entry[encabezados[j]] = valores[j];
+    let nuevosDatos = resultado['boton']+","+resultado['archivo']+';';
+    const contenidoCsv = fs.readFileSync(archivoCSV, 'utf-8');
+    arrayDatos = csvAarray(contenidoCsv);
+    let botonRepetido = false;
+    arrayDatos.forEach(itemArray => {
+      if(itemArray['boton'] == resultado['boton']){
+        itemArray['direccion'] == resultado['archivo'];
+        botonRepetido = true;
       }
-      arrayDatos.push(entry);
+    });
+    console.log(botonRepetido);
+    if(botonRepetido){
+      nuevosDatos = arrayAcsv(arrayDatos);
+      fs.writeFile('streamdeck.csv', nuevosDatos, (err) => {
+        if (err) {
+          console.error('Error writing file:', err);
+        } else {
+          console.log('CSV file "output.csv" has been saved.');
+        }
+      });
+    }else{
+      fs.appendFile(archivoCSV, nuevosDatos, (err) => {
+          if (err) {
+              console.error('Error appending data to CSV:', err);
+              return;
+          }
+          console.log('Data successfully appended to CSV.');
+      });
     }
-  });
+  }
+  // const funcionesBotones = csvAarray(fs.readFileSync(archivoCSV, 'utf-8'));
   res.redirect('/');
 })
 
