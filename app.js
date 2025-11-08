@@ -44,12 +44,11 @@ function csvAarray(csv){
     return arrayDatos;
 }
 function arrayAcsv(array){
-  for(var i = 0; i > count(array); i++){
-        if(array[i] === undefined){
-            this.splice(i , 1);
-        }
+  array.forEach(itemArray, i => {
+    if(itemArray['direccion'] == undefined){
+      array.slice(i+1);
     }
-
+  });
   csv = "boton,direccion;";
   array.forEach(itemsArray => {
     csv += itemsArray['boton'] + "," + itemsArray['direccion'] + ";";
