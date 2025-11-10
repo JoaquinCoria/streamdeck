@@ -1,5 +1,5 @@
 const { exec } = require('child_process');
-const { SerialPort } = require('serialport');
+const { SerialPort, SlipDecoder } = require('serialport');
 // const { SerialPort } = require('@serialport/stream');
 const bindings  = require('@serialport/bindings-cpp');
 SerialPort.bindings = bindings;
@@ -13,9 +13,6 @@ const pool = require("./db");
 const app = express()
 app.use(express.static('views'));
 app.use(express.static('img'));
-const session = require("express-session");
-const bcrypt = require("bcryptjs");
-const pool = require("./db");
 
 const port = 3000
 
@@ -44,14 +41,11 @@ function csvAarray(csv){
     return arrayDatos;
 }
 function arrayAcsv(array){
-  array.forEach(itemArray, i => {
-    if(itemArray['direccion'] == undefined){
-      array.slice(i+1);
-    }
-  });
   csv = "boton,direccion;";
   array.forEach(itemsArray => {
-    csv += itemsArray['boton'] + "," + itemsArray['direccion'] + ";";
+    if(itemsArray['boton'] != ''){
+      csv += itemsArray['boton'] + "," + itemsArray['direccion'] + ";";
+    }
   });
   return csv;
 }
@@ -132,7 +126,7 @@ app.post('/resultado', (req, res) => {
     let botonRepetido = false;
     arrayDatos.forEach(itemArray => {
       if(itemArray['boton'] == resultado['boton']){
-        itemArray['direccion'] == resultado['archivo'];
+        itemArray['direccion'] = resultado['archivo'];
         botonRepetido = true;
       }
     });
