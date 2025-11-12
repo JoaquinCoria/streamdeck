@@ -5,9 +5,10 @@ html
     title= title
   body
     div.cuenta
-      div.login
-        a(href="") Crear Cuenta
-        a(href="") Ingresar 
+      if(!session.user)
+        div.login
+          a(href="./register") Crear Cuenta
+          a(href="./login") Ingresar 
     h1= message
     form(action="/resultado" method = "post")
       .contenedor

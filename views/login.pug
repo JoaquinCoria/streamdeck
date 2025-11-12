@@ -1,0 +1,22 @@
+html
+  head
+    style
+      include login.css
+    title= title
+  body
+
+    div.cuenta
+      div.login
+        a(href="/") Volver
+        a(href=link)=msgBoton
+    div.contenedor
+        h1= message
+        form(action=linkForm method = "post")
+            .contenedorLogin
+                label(for="username") Nombre de Usuario
+                input(type='text' id = 'username' name = 'username' required)
+                label(for="password") Contraseña
+                input(type='password' id = 'password' name = 'password' required)
+                button(type='submit' name="btnEnviar" )=title
+        if errorMessage
+        .error= errorMessage

@@ -15,11 +15,22 @@ app.use(express.static('views'));
 app.use(express.static('img'));
 
 const port = 3000
-
+if (session.user) {
+  
 app.set('view engine', 'pug')
 app.get('/', (req, res) => {
   res.render('index', { title: 'Streamdeck', message: 'Streamdeck' })
 })
+
+app.get('/login', (req, res) => {
+  res.render('login', { title: 'Ingresar', message: 'Ingresar Cuenta', link: './register', msgBoton: 'Crear cuenta', linkForm: './login'})
+})
+
+app.get('/register', (req, res) => {
+  res.render('login', { title: 'Registrar', message: 'Crear Cuenta', link: './login', msgBoton: 'Iniciar sesion', linkForm: './register'})
+})
+
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -63,6 +74,15 @@ function authRequired(req, res, next) {
   next();
 }
 
+app.post("/register", async (req, res) => {
+  const { username, password } = req.body;
+  console.log(username, password);
+  await pool.query("INSERT INTO usuario(nombre, password) VALUES (?,?) ", [
+    username, password
+  ]);
+  res.json({ message: "Register exitoso" });
+});
+
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
@@ -74,13 +94,12 @@ app.post("/login", async (req, res) => {
     return res.status(400).json({ error: "Usuario no encontrado" });
 
   const user = rows[0];
-
-  const ok = bcrypt.compareSync(password, user.password);
+  if(password == user.password)ok = true;
   if (!ok) return res.status(400).json({ error: "Credenciales inválidas" });
 
   req.session.user = { id: user.id, username: user.username };
 
-  res.json({ message: "Login exitoso" });
+  res.redirect('/');
 });
 
 app.get("/perfil", authRequired, (req, res) => {
