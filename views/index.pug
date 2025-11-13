@@ -50,9 +50,29 @@ html
               input(type = "radio" name = "boton" value = "D" id = "botonD" class = "btnLetra labelBoton")
               label(for="botonD").letra D
           .funciones
+            p.direccionPrevia(style="display:none;")
             label(for="archivo") Ingrese el URL del archivo
             input(type='text' id = 'archivo' name = 'archivo')
             button(type='submit') Enviar
+            .predeterminados 
+              h2 Funciones predeterminadas
+              .botones
+                button(type='button' value = "code" id = "visual" class = "botonPredeterminado")
+                  img(src="./img/visualstudio.webp")
+                button(type='button' value= "https://www.instagram.com" id = "youtube" class = "botonPredeterminado")
+                  img(src="./img/youtube.png")
+                button(type='button' value= "github" id = "github" class = "botonPredeterminado")
+                  img(src="./img/github.png")
+                button(type='button' value = "ms-settings:" id = "configuracion" class = "botonPredeterminado")
+                  img(src="./img/configuracion.png")
+                button(type='button' value = "https://www.instagram.com" id = "instagram" class = "botonPredeterminado")
+                  img(src="./img/instagram.png")
+                button(type='button' value = "C:/xampp/xampp-control.exe" id = "xampp" class = "botonPredeterminado")
+                  img(src="./img/xampp.png")
+                button(type='button' value = "taskmgr" id = "administradortareas" class = "botonPredeterminado")
+                  img(src="./img/administradortareas.png")
+                button(type='button' value = "calc" id = "calculadora" class = "botonPredeterminado")
+                  img(src="./img/calculadora.png")
     div.tutorial 
       h1 Tutorial 
       div.contenedorInfo 
@@ -71,5 +91,6 @@ html
             <source src="./img/tutorial3.mp4" type="video/mp4">
           </video>
           p Para poder utilizar la streamdeck tenes que seleccionar el numero o letra que quieras enlazar, para esto hay que pegar con "Control + V" el link en el apartado que dice "Ingrese el URL del archivo" y darle al boton de "Enviar". Listo ya lo tenes seteado :D 
+script.
+  funcionesBotones = !{JSON.stringify(funcionesBotones)};
 script(src='mostrarFunciones.js') 
-script(scr='tutorial.js')

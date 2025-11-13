@@ -5,7 +5,6 @@ const bindings  = require('@serialport/bindings-cpp');
 SerialPort.bindings = bindings;
 
 const fs = require('fs');
-const { Parser } = require('json2csv');
 const express = require('express')
 const session = require("express-session");
 const bcrypt = require("bcryptjs");
@@ -18,9 +17,6 @@ const port = 3000
 if (session.user) {
   
 app.set('view engine', 'pug')
-app.get('/', (req, res) => {
-  res.render('index', { title: 'Streamdeck', message: 'Streamdeck' })
-})
 
 app.get('/login', (req, res) => {
   res.render('login', { title: 'Ingresar', message: 'Ingresar Cuenta', link: './register', msgBoton: 'Crear cuenta', linkForm: './login'})
@@ -35,21 +31,21 @@ app.get('/register', (req, res) => {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-
+// FUNCIONES
 function csvAarray(csv){
-   const filas = csv.split(';');
-    const encabezados = filas[0].split(',');
-    const arrayDatos = [];
+  const filas = csv.split(';');
+  const encabezados = filas[0].split(',');
+  const arrayDatos = [];
 
-    for (let i = 1; i < filas.length; i++) {
-      const valores = filas[i].split(',');
-      const entry = {};
-      for (let j = 0; j < encabezados.length; j++) {
-        entry[encabezados[j]] = valores[j];
-      }
-      arrayDatos.push(entry);
+  for (let i = 1; i < filas.length; i++) {
+    const valores = filas[i].split(',');
+    const entry = {};
+    for (let j = 0; j < encabezados.length; j++) {
+      entry[encabezados[j]] = valores[j];
     }
-    return arrayDatos;
+    arrayDatos.push(entry);
+  }
+  return arrayDatos;
 }
 function arrayAcsv(array){
   csv = "boton,direccion;";
@@ -60,6 +56,16 @@ function arrayAcsv(array){
   });
   return csv;
 }
+function archivoExiste(direccion) {
+    if (fs.existsSync(direccion)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
+  // SESSION
 app.use(
   session({
     secret: "clave-secreta-super-segura",
@@ -82,6 +88,16 @@ app.post("/register", async (req, res) => {
   ]);
   res.json({ message: "Register exitoso" });
 });
+// PÁGINAS
+app.get('/', (req, res) => {
+  if(archivoExiste("./streamdeck.csv")){
+    const contenidoCsv = fs.readFileSync("./streamdeck.csv", 'utf-8');
+    arrayFunciones = csvAarray(contenidoCsv);
+  }else{
+    arrayFunciones = false;
+  }
+  res.render('index', { title: 'Streamdeck', message: 'Streamdeck', funcionesBotones: arrayFunciones})
+})
 
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
@@ -116,13 +132,6 @@ app.post("/logout", (req, res) => {
 
 app.post('/resultado', (req, res) => {
   resultado = req.body;
-  function archivoExiste(filePath) {
-    if (fs.existsSync(filePath)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
   const archivoCSV = "./streamdeck.csv";
   if(!archivoExiste(archivoCSV)){
     const datos = [
@@ -149,7 +158,6 @@ app.post('/resultado', (req, res) => {
         botonRepetido = true;
       }
     });
-    console.log(botonRepetido);
     if(botonRepetido){
       nuevosDatos = arrayAcsv(arrayDatos);
       fs.writeFile('streamdeck.csv', nuevosDatos, (err) => {
@@ -173,9 +181,6 @@ app.post('/resultado', (req, res) => {
   res.redirect('/');
 })
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
 
 const puerto = new SerialPort({
   path: 'COM8',
@@ -187,9 +192,26 @@ puerto.on('open', () => {
 });
 let resultado = null;
 puerto.on('data', (data) => {
+    const contenidoCsv = fs.readFileSync(archivoCSV, 'utf-8');
+    const botonesFunciones = csvAarray(contenidoCsv);
     const keypressed = data.toString().trim(); // Convert buffer to string and remove whitespace
     // console.log('Key Pressed:', keypressed);
-    switch(keypressed){
+    botonesFunciones.forEach(itemArray => {
+      if(keypressed = itemArray['boton']){
+        exec('start' + itemArray['direccion'], (error, stdout, stderr) => {
+          if (error) {
+            console.error(`Error al ejecutar el comando: ${error.message}`);
+            return;
+          }
+          if (stderr) {
+            console.error(`Salida de error: ${stderr}`);
+            return;
+          }
+          // console.log(`Salida del comando: ${stdout}`);
+          });
+      }
+    });
+    // switch(keypressed){
       // case "6":
       //   exec('start https://www.youtube.com', (error, stdout, stderr) => {
       //     if (error) {
@@ -203,33 +225,33 @@ puerto.on('data', (data) => {
       //     // console.log(`Salida del comando: ${stdout}`);
       //     });
       //   break;
-      case resultado['boton']:
-        console.log(resultado['archivo']);
-        exec('start ' + resultado['archivo'], (error, stdout, stderr) => {
-          if (error) {
-            console.error(`Error al ejecutar el comando: ${error.message}`);
-            return;
-          }
-          if (stderr) {
-            console.error(`Salida de error: ${stderr}`);
-            return;
-          }
-          // console.log(`Salida del comando: ${stdout}`);
-          });
-        break;
-      case "A":
-        exec('start code', (error, stdout, stderr) => {
-          if (error) {
-            console.error(`Error al ejecutar el comando: ${error.message}`);
-            return;
-          }
-          if (stderr) {
-            console.error(`Salida de error: ${stderr}`);
-            return;
-          }
-          // console.log(`Salida del comando: ${stdout}`);
-          });
-        break;
+      // case resultado['boton']:
+      //   console.log(resultado['archivo']);
+      //   exec('start ' + resultado['archivo'], (error, stdout, stderr) => {
+      //     if (error) {
+      //       console.error(`Error al ejecutar el comando: ${error.message}`);
+      //       return;
+      //     }
+      //     if (stderr) {
+      //       console.error(`Salida de error: ${stderr}`);
+      //       return;
+      //     }
+      //     // console.log(`Salida del comando: ${stdout}`);
+      //     });
+      //   break;
+      // case "A":
+      //   exec('start code', (error, stdout, stderr) => {
+      //     if (error) {
+      //       console.error(`Error al ejecutar el comando: ${error.message}`);
+      //       return;
+      //     }
+      //     if (stderr) {
+      //       console.error(`Salida de error: ${stderr}`);
+      //       return;
+      //     }
+      //     // console.log(`Salida del comando: ${stdout}`);
+      //     });
+      //   break;
       // case "9":
       //   exec('start https://www.instagram.com', (error, stdout, stderr) => {
       //     if (error) {
@@ -323,13 +345,13 @@ puerto.on('data', (data) => {
       //     // console.log(`Salida del comando: ${stdout}`);
       //     });
       //   break;
-    }
+//     }
 });
 
 puerto.on('error', (err) => {
-    console.error('Serial Port Error:', err.message);
+    console.error('Error en el puerto serial:', err.message);
 });
 
-// app.listen(port, () => {
-//   console.log(`Escuchando en el puerto ${port}`)
-// })
+app.listen(port, () => {
+  console.log(`Escuchando en el puerto ${port}`)
+})
