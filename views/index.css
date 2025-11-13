@@ -95,7 +95,7 @@ form{
     transition: all 200ms;
     border-color: rgb(0, 110, 255);
 }
-.streamdeck input[class="btnLetra"]:checked + label{
+.streamdeck input[type='radio'].btnLetra:checked + label{
     background-color: #eee;
     color: red;
     font-weight: bolder;
@@ -124,6 +124,13 @@ form{
     align-items: center;
     padding: 25px 10px 10px 10px;
 }
+.funciones .direccionPrevia{
+    background-color: white;
+    color: black;
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 6px;
+}
 .funciones input[type="text"]{
     width: 40%;
     padding: 4px 10px;
@@ -150,6 +157,40 @@ form{
     background-color: red;
     transition: all 200ms;
 }
+
+.funciones .predeterminados{
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    gap: 10px;
+}
+.predeterminados h2{
+    text-align: center;
+}
+.predeterminados .botones{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
+.botones button{
+    width: 20%;
+    height: 150px;
+    background-color: white;
+}
+.botones button:hover{
+    transform: scale(1.05);
+    background-color: white;
+}
+.botones button:hover{
+}
+.botones button img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+/* ---- TUTORIAL ---- */
 .tutorial {
     width: 100%;
     display: flex;
