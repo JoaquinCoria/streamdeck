@@ -6,8 +6,12 @@ html
   body
     div.cuenta
       div.login
-        a(href="./register") Crear Cuenta
-        a(href="./login") Ingresar 
+        if userLoggedIn
+          span Hola, #{username} 
+          a(href="./logout") Cerrar Sesión
+        else
+          a(href="./register") Crear Cuenta
+          a(href="./login") Ingresar 
     h1= message
     form(action="/resultado" method = "post")
       .contenedor

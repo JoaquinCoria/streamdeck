@@ -13,9 +13,7 @@ const app = express()
 app.use(express.static('views'));
 app.use(express.static('img'));
 
-const port = 3000;
-// if (session.user) {
-  
+const port = 3000;  
 app.set('view engine', 'pug')
 
 app.get('/login', (req, res) => {
@@ -25,7 +23,6 @@ app.get('/login', (req, res) => {
 app.get('/register', (req, res) => {
   res.render('login', { title: 'Registrar', message: 'Crear Cuenta', link: './login', msgBoton: 'Iniciar sesion', linkForm: './register'})
 })
-
 
 
 app.use(express.urlencoded({ extended: true }));
@@ -86,7 +83,8 @@ app.post("/register", async (req, res) => {
   await pool.query("INSERT INTO usuario(nombre, password) VALUES (?,?) ", [
     username, password
   ]);
-  res.json({ message: "Register exitoso" });
+  // res.json({ message: "Register exitoso" });
+  res.redirect('/login');
 });
 // PÁGINAS
 app.get('/', (req, res) => {
@@ -96,7 +94,7 @@ app.get('/', (req, res) => {
   }else{
     arrayFunciones = false;
   }
-  res.render('index', { title: 'Streamdeck', message: 'Streamdeck', funcionesBotones: arrayFunciones})
+  res.render('index', { title: 'Streamdeck', message: 'Streamdeck', funcionesBotones: arrayFunciones, userLoggedIn: req.session.user ? true : false, username: req.session.user ? req.session.user.username : null})
 })
 
 app.post("/login", async (req, res) => {
@@ -107,30 +105,49 @@ app.post("/login", async (req, res) => {
   ]);
 
   if (rows.length === 0)
-    return res.status(400).json({ error: "Usuario no encontrado" });
+    return res.redirect('/login');
 
   const user = rows[0];
-  if(password == user.password)ok = true;
-  if (!ok) return res.status(400).json({ error: "Credenciales inválidas" });
 
-  req.session.user = { id: user.id, username: user.username };
+  let ok = false;                
+  if (password == user.password) ok = true;
+  if (!ok) return res.status(400).json({ error: "Credenciales inválidas" });
+  fs.unlinkSync('./streamdeck.csv');
+  req.session.user = { id: user.id, username: user.nombre };
+  const [botones] = await pool.query("SELECT * FROM botones WHERE fkIdUsuario = ?", [
+    req.session.user.id
+  ]);
+
+  if (botones.length != 0){
+    fs.writeFile('streamdeck.csv', arrayAcsv(botones), (err) => {
+      if (err) {
+        console.error('Error writing file:', err);
+      } else {
+        console.log('CSV file "output.csv" has been saved.');
+      }
+    });
+  }
+
 
   res.redirect('/');
 });
+
 
 app.get("/perfil", authRequired, (req, res) => {
   res.json({ user: req.session.user });
 });
 
 // Logout
-app.post("/logout", (req, res) => {
+app.get('/logout', (req, res) => {
   req.session.destroy(err => {
-    if (err) return res.status(500).json({ error: "Error cerrando sesión" });
-    res.json({ message: "Sesión finalizada" });
+    if (err) {
+      console.error(err);
+      return res.status(500).send("Error cerrando sesión");
+    }
+    res.redirect('/login');
   });
 });
-
-app.post('/resultado', (req, res) => {
+app.post('/resultado', async(req, res) => {
   resultado = req.body;
   const archivoCSV = "./streamdeck.csv";
   if(!archivoExiste(archivoCSV)){
@@ -176,6 +193,21 @@ app.post('/resultado', (req, res) => {
           console.log('Data successfully appended to CSV.');
       });
     }
+  }
+  console.log(req.session.user);
+  if(req.session.user != undefined){
+    await pool.query("DELETE FROM botones WHERE fkIdUsuario = ?", [
+      req.session.id
+    ]);
+    csvDatos = fs.readFileSync(archivoCSV, "utf-8");
+    arrayDatos = csvAarray(csvDatos);
+    arrayDatos.forEach(async(itemArray) => {
+      if(itemArray['boton'] !== ""){
+        await pool.query("INSERT INTO botones(fkIdUsuario, boton, direccion) VALUES (?,?,?) ", [
+          req.session.user.id , itemArray['boton'], itemArray['direccion']
+        ]);
+      }
+    });
   }
   // const funcionesBotones = csvAarray(fs.readFileSync(archivoCSV, 'utf-8'));
   res.redirect('/');

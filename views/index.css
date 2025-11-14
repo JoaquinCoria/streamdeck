@@ -161,8 +161,8 @@ form{
 .funciones .predeterminados{
     display: flex;
     flex-direction: column;
-    width: 90%;
-    gap: 10px;
+    width: 80%;
+    gap: 16px;
 }
 .predeterminados h2{
     text-align: center;
@@ -172,18 +172,27 @@ form{
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 15px;
+    gap: 20px;
+         
 }
 .botones button{
     width: 20%;
-    height: 150px;
+    height: 90px;
     background-color: white;
+    
 }
 .botones button:hover{
     transform: scale(1.05);
     background-color: white;
 }
-.botones button:hover{
+span{
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: #e7e7e7 ;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    padding-top: 3px;
+    padding-left: 2px;
+    
 }
 .botones button img{
     width: 100%;
