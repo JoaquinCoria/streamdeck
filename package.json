@@ -3,6 +3,7 @@
     "@serialport/bindings-cpp": "^13.0.0",
     "@serialport/stream": "^13.0.0",
     "bcryptjs": "^3.0.3",
+    "deamon": "^1.0.0",
     "express": "^5.1.0",
     "express-session": "^1.18.2",
     "html": "^1.0.0",

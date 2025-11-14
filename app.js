@@ -215,7 +215,7 @@ app.post('/resultado', async(req, res) => {
 
 
 const puerto = new SerialPort({
-  path: 'COM8',
+  path: 'COM3',
   baudRate: 115200
 });
 
@@ -224,13 +224,13 @@ puerto.on('open', () => {
 });
 let resultado = null;
 puerto.on('data', (data) => {
-  const contenidoCsv = fs.readFileSync(archivoCSV, 'utf-8');
+  const contenidoCsv = fs.readFileSync("./streamdeck.csv", 'utf-8');
   const botonesFunciones = csvAarray(contenidoCsv);
   const keypressed = data.toString().trim(); // Convert buffer to string and remove whitespace
   // console.log('Key Pressed:', keypressed);
   botonesFunciones.forEach(itemArray => {
-    if(keypressed = itemArray['boton']){
-      exec('start' + itemArray['direccion'], (error, stdout, stderr) => {
+    if(keypressed == itemArray['boton']){
+      exec('start ' + itemArray['direccion'], (error, stdout, stderr) => {
         if (error) {
           console.error(`Error al ejecutar el comando: ${error.message}`);
           return;
