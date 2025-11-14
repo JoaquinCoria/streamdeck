@@ -215,7 +215,7 @@ app.post('/resultado', async(req, res) => {
 
 
 const puerto = new SerialPort({
-  path: 'COM3',
+  path: 'COM9',
   baudRate: 115200
 });
 
