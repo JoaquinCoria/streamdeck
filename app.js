@@ -25,18 +25,7 @@ app.get('/login', (req, res) => {
 app.get('/register', (req, res) => {
   res.render('login', { title: 'Registrar', message: 'Crear Cuenta', link: './login', msgBoton: 'Iniciar sesion', linkForm: './register'})
 })
-app.post('/login', (req, res) => {
-  console.log(req.session.user);
-});
-app.get('/logout', (req, res) => {
-  req.session.destroy(err => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send("Error cerrando sesión");
-    }
-    res.redirect('/login');    
-  });
-});
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -106,7 +95,7 @@ app.get('/', (req, res) => {
   }else{
     arrayFunciones = false;
   }
-  res.render('index', { title: 'Streamdeck', message: 'Streamdeck', funcionesBotones: arrayFunciones})
+  res.render('index', { title: 'Streamdeck', message: 'Streamdeck', funcionesBotones: arrayFunciones, userLoggedIn: req.session.user ? true : false, username: req.session.user ? req.session.user.username : null})
 })
 
 app.post("/login", async (req, res) => {
@@ -120,25 +109,33 @@ app.post("/login", async (req, res) => {
     return res.status(400).json({ error: "Usuario no encontrado" });
 
   const user = rows[0];
-  if(password == user.password)ok = true;
+
+  let ok = false;                
+  if (password == user.password) ok = true;
   if (!ok) return res.status(400).json({ error: "Credenciales inválidas" });
 
-  req.session.user = { id: user.id, username: user.username };
+  req.session.user = { id: user.id, username: user.nombre };
 
+  console.log(req.session.user);
   res.redirect('/');
 });
+
 
 app.get("/perfil", authRequired, (req, res) => {
   res.json({ user: req.session.user });
 });
 
 // Logout
-app.post("/logout", (req, res) => {
+app.get('/logout', (req, res) => {
   req.session.destroy(err => {
-    if (err) return res.status(500).json({ error: "Error cerrando sesión" });
-    res.json({ message: "Sesión finalizada" });
+    if (err) {
+      console.error(err);
+      return res.status(500).send("Error cerrando sesión");
+    }
+    res.redirect('/login');    
   });
 });
+
 
 app.post('/resultado', (req, res) => {
   resultado = req.body;
