@@ -18,7 +18,7 @@ botones.forEach(boton => {
         funciones[0].classList.add('funcionesActivo');
         let encontrado = false;
         funcionesBotones.forEach(itemArray => {
-            if(itemArray['boton'] == boton.id.slice(-1)){
+            if(itemArray['boton'] == boton.value){
                 funcionAnterior[0].style.display = "block";
                 funcionAnterior[0].textContent = "Direccion previa: " + itemArray['direccion'];
                 encontrado = true;
