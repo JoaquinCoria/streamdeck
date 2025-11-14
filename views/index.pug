@@ -6,8 +6,12 @@ html
   body
     div.cuenta
       div.login
-        a(href="./register") Crear Cuenta
-        a(href="./login") Ingresar 
+        if userLoggedIn
+          span Hola, #{username} |
+          a(href="./logout") Cerrar Sesión
+        else
+          a(href="./register") Crear Cuenta
+          a(href="./login") Ingresar 
     h1= message
     form(action="/resultado" method = "post")
       .contenedor
@@ -79,7 +83,7 @@ html
           <video width="500" height="281" autoplay loop="true" muted>
             <source src="./img/tutorial1.mp4" type="video/mp4">
           </video> 
-          p Para poder utilizar la Stream Deck hay que copiar la ubicación del archivo, para estoy hay que ir al archivo que quieras utilizar, con click derecho ir a propiedades y donde dice "Destino:" copiar con "Control + C". 
+          p Para poder utilizar la streamdeck hay que copiar la ubicacion del archivo, para estoy hay que ir al archivo que quieras utilizar, con click derecho ir a propiedades y donde dice "Destino:" copiar con "Control + C". 
         .info1(id="info2")
           p Además podés copiar la URL de un sitio web, seleccionando toda la URL copiando con "Control + C". 
           <video width="500" height="281" autoplay loop="true" muted>
@@ -89,7 +93,7 @@ html
           <video width="500" height="265" autoplay loop="true" muted>
             <source src="./img/tutorial3.mp4" type="video/mp4">
           </video>
-          p Para poder utilizar la Stream Deck tenés que seleccionar el número o letra que quieras enlazar, para esto hay que pegar con "Control + V" el link en el apartado que dice "Ingrese el URL del archivo" y darle al boton de "Enviar". Listo, ya lo tenés seteado :D 
+          p Para poder utilizar la streamdeck tenes que seleccionar el numero o letra que quieras enlazar, para esto hay que pegar con "Control + V" el link en el apartado que dice "Ingrese el URL del archivo" y darle al boton de "Enviar". Listo ya lo tenes seteado :D 
 script.
   funcionesBotones = !{JSON.stringify(funcionesBotones)};
 script(src='mostrarFunciones.js') 

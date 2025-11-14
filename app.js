@@ -25,8 +25,18 @@ app.get('/login', (req, res) => {
 app.get('/register', (req, res) => {
   res.render('login', { title: 'Registrar', message: 'Crear Cuenta', link: './login', msgBoton: 'Iniciar sesion', linkForm: './register'})
 })
-
-
+app.post('/login', (req, res) => {
+  console.log(req.session.user);
+});
+app.get('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send("Error cerrando sesión");
+    }
+    res.redirect('/login');    
+  });
+});
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
