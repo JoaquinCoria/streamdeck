@@ -97,6 +97,7 @@ app.post("/register", async (req, res) => {
     username, password
   ]);
   res.json({ message: "Register exitoso" });
+  res.redirect('./login');
 });
 // PÁGINAS
 app.get('/', (req, res) => {
@@ -207,7 +208,7 @@ puerto.on('data', (data) => {
   const keypressed = data.toString().trim(); // Convert buffer to string and remove whitespace
   // console.log('Key Pressed:', keypressed);
   botonesFunciones.forEach(itemArray => {
-    if(keypressed = itemArray['boton']){
+    if(keypressed == itemArray['boton']){
       exec('start' + itemArray['direccion'], (error, stdout, stderr) => {
         if (error) {
           console.error(`Error al ejecutar el comando: ${error.message}`);
